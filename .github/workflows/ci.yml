@@ -50,7 +50,7 @@ jobs:
           runtime: NODEJS_16
           build-command: npm install
           start-command: npm run deploy
-          port: 18000
+          port: 3000
           region: ${{ secrets.AWS_REGION }}
           cpu : 1
           memory : 2
