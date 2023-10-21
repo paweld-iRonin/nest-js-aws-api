@@ -26,7 +26,7 @@ export class CompaniesService {
 
   async findOne(id: number) {
     return this.companiesRepository.findOne({
-      where: { id }
+      where: { id },
     });
   }
 
@@ -36,7 +36,6 @@ export class CompaniesService {
     company.location = updateCompanyDto.location;
 
     await this.entityManager.save(company);
-
   }
 
   async remove(id: number) {
