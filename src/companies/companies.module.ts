@@ -6,10 +6,11 @@ import { Company } from './entities/company.entity';
 import { Asset } from './entities/asset.entity';
 import { FileUploadService } from './file.upload.service';
 import { AssetsService } from './assets.service';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Company, Asset])],
   controllers: [CompaniesController],
-  providers: [CompaniesService, FileUploadService, AssetsService],
+  providers: [CompaniesService, FileUploadService, AssetsService, EmailService],
 })
 export class CompaniesModule {}

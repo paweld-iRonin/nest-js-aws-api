@@ -18,12 +18,14 @@ import { Pagination } from './../paginate';
 import { Company } from './entities/company.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AssetsService } from './assets.service';
+import { EmailService } from './email.service';
 
 @Controller('companies')
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService,
     private readonly fileUploadService: FileUploadService,
-    private readonly assetsService: AssetsService) {}
+    private readonly assetsService: AssetsService,
+    private readonly emailService: EmailService) {}
 
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
@@ -62,5 +64,10 @@ export class CompaniesController {
   @Get('assets/:id')
   findOneAsset(@Param('id') id: string) {
     return this.assetsService.findOne(+id);
+  }
+
+  @Get('send_email/:email')
+  sendEmail(@Param('email') email: string) {
+    return this.emailService.send(email);
   }
 }
