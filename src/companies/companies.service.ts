@@ -21,7 +21,9 @@ export class CompaniesService {
     await this.entityManager.save(company);
   }
 
-  async findAll(options: PaginationOptionsInterface): Promise<Pagination<Company>> {
+  async findAll(
+    options: PaginationOptionsInterface,
+  ): Promise<Pagination<Company>> {
     const [results, total] = await this.companiesRepository.findAndCount({
       take: options.limit,
       skip: options.page * options.limit,
