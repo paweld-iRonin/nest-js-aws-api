@@ -7,16 +7,20 @@ import {
   Param,
   Delete,
   Request,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
+import { FileUploadService } from './file.upload.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Pagination } from './../paginate';
 import { Company } from './entities/company.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(private readonly companiesService: CompaniesService, private readonly fileUploadService: FileUploadService) {}
 
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
@@ -44,5 +48,11 @@ export class CompaniesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.companiesService.remove(+id);
+  }
+
+  @Post('upload_asset')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.fileUploadService.uploadFile(file.buffer, file.originalname);
   }
 }
