@@ -14,7 +14,7 @@ export default new DataSource({
   database: configService.getOrThrow('DATABASE_NAME'),
   username: configService.getOrThrow('DATABASE_USER'),
   password: configService.getOrThrow('DATABASE_PASSWORD'),
-  ssl: configService.getOrThrow('NODE_ENV') === 'production',
+  ssl: configService.getOrThrow('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
   migrations: ['migrations/**'],
   entities: [Company],
 });

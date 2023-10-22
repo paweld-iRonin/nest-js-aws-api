@@ -12,8 +12,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: configService.getOrThrow('DATABASE_NAME'),
         username: configService.getOrThrow('DATABASE_USER'),
         password: configService.getOrThrow('DATABASE_PASSWORD'),
-        autoLoadEntities: true,
-        ssl: configService.getOrThrow('NODE_ENV') === 'production',
+        ssl: configService.getOrThrow('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
+        autoLoadEntities: true
       }),
       inject: [ConfigService],
     }),
