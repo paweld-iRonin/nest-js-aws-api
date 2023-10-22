@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Pagination } from './../paginate';
+import { Company } from './entities/company.entity';
 
 @Controller('companies')
 export class CompaniesController {
@@ -21,8 +24,11 @@ export class CompaniesController {
   }
 
   @Get()
-  findAll() {
-    return this.companiesService.findAll();
+  findAll(@Request() request): Promise<Pagination<Company>> {
+    return this.companiesService.findAll({
+      limit: request.query.hasOwnProperty('limit') ? request.query.limit : 10,
+      page: request.query.hasOwnProperty('page') ? request.query.page : 0,
+    });
   }
 
   @Get(':id')

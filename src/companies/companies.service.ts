@@ -4,6 +4,7 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Company } from './entities/company.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Pagination, PaginationOptionsInterface } from './../paginate';
 
 @Injectable()
 export class CompaniesService {
@@ -20,8 +21,16 @@ export class CompaniesService {
     await this.entityManager.save(company);
   }
 
-  async findAll() {
-    return this.companiesRepository.find();
+  async findAll(options: PaginationOptionsInterface): Promise<Pagination<Company>> {
+    const [results, total] = await this.companiesRepository.findAndCount({
+      take: options.limit,
+      skip: options.page * options.limit,
+    });
+
+    return new Pagination<Company>({
+      results,
+      total,
+    });
   }
 
   async findOne(id: number) {
