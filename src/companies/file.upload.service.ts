@@ -2,12 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuid } from 'uuid';
+import { AssetsService } from './assets.service';
 
 @Injectable()
 export class FileUploadService {
-    constructor(private readonly configService: ConfigService) {}
+    constructor(private readonly configService: ConfigService, private readonly assetsService: AssetsService) {}
 
-    async uploadFile(dataBuffer: Buffer, fileName: string): Promise<string> {
+    async uploadFile(dataBuffer: Buffer, fileName: string) {
       const s3 = new S3Client({
         region: this.configService.getOrThrow('AWS_REGION'),
         credentials: {
@@ -25,6 +26,6 @@ export class FileUploadService {
       });
 
       const result = await s3.send(command);
-      return fileS3Name;
+      return this.assetsService.create({ filename: fileName, uid: fileS3Name });
     }
 }

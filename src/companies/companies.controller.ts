@@ -17,10 +17,13 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Pagination } from './../paginate';
 import { Company } from './entities/company.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AssetsService } from './assets.service';
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService, private readonly fileUploadService: FileUploadService) {}
+  constructor(private readonly companiesService: CompaniesService,
+    private readonly fileUploadService: FileUploadService,
+    private readonly assetsService: AssetsService) {}
 
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
@@ -54,5 +57,10 @@ export class CompaniesController {
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return this.fileUploadService.uploadFile(file.buffer, file.originalname);
+  }
+
+  @Get('assets/:id')
+  findOneAsset(@Param('id') id: string) {
+    return this.assetsService.findOne(+id);
   }
 }
